@@ -1,0 +1,102 @@
+application {
+    config {
+        baseName autenticate
+        applicationType monolith
+        packageName cu.divep.autenticate
+        authenticationType jwt
+        buildTool maven
+        jhiPrefix app
+        databaseType postgresql
+        clientFramework angular
+        nativeLanguage es
+        languages [es]
+        enableTranslation true
+        reactive false
+        testFrameworks [cypress]
+    }
+    entities *
+    dto * with mapstruct
+    service * with serviceImpl
+    paginate * with pagination
+}
+
+
+
+
+entity Almacenes {
+	denominacion String required unique
+	direccion String
+}
+entity Cargos {
+	denominacion String required unique
+	areadetrabajo AreaDeTrabajo
+}
+entity AreaDeTrabajo {
+	denominacion String required unique
+	ueb Ueb
+}
+entity Servicios {
+	denominacion String required unique
+	alcance String
+}
+entity Roles {
+	denominacion String required unique
+}
+entity RolDistra {
+	denominacion String required unique
+}
+entity Trabajador {
+	nombre String required
+	apellidos String required
+	ci Long required unique
+	telefono Long
+	email String required minlength(5) maxlength(254) pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+    usuarioDistra String
+
+}
+
+entity Ueb {
+	denominacion String required
+	direccion String
+	coordenasas String
+	email String required minlength(5) maxlength(254) pattern(/^[^@\s]+@[^@\s]+\.[^@\s]+$/)
+
+}
+entity Solicitud {
+	denominacion String required unique
+	
+}
+
+
+
+
+
+relationship OneToOne {
+	
+    Trabajador{user(login)} to User with builtInEntity
+}
+
+enum EstadoSolicitud {
+    CREADA, PENDIENTE, APROBADA, CERRADA
+}
+
+relationship OneToMany {
+	Cargos to Trabajador{cargo(denominacion)}
+	Roles to Cargos{roles(denominacion)}
+	Ueb to AreaDeTrabajo{ueb(denominacion)}
+    Ueb to Almacenes{ueb(denominacion)}
+	AreaDeTrabajo to Cargos{areadetrabajo(denominacion)}
+    Trabajador{almacenes(denominacion)} to Almacenes
+	Rol to Roles{roles(denominacion)}
+	Trabajador to Solicitud{perfil(nombre)}
+	Solicitud to Servicios{solicitud(denominacion)}
+ 
+}
+
+
+
+// Set pagination options
+search Solicitud, Trabajador, Servicios, Roles, Servicios, AreaDeTrabajo, Cargos with elasticsearch
+filter Solicitud, Ueb, Trabajador
+// Set an angular suffix
+// angularSuffix * with mySuffix
