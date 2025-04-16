@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-AutenticateApp<autenticate>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "cu.divep.autenticate.AutenticateApp",
+      "projectName": "autenticate",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
